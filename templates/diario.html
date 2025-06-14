@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Diário de Progresso</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+  <header>
+    <a href="#" class="logo">ProgressDay</a>
+    <nav>
+      <a href="/" class="active">Home</a>
+      <a href="/registros">Ver Registros</a>
+    </nav>
+    <div class="menu-icon" onclick="toggleMenu()">
+      <i class="fas fa-bars"></i>
+    </div>
+  </header>
+
+  <section class="home">
+    <div class="home-content">
+      <h1>Diário de Progresso Diário</h1>
+      <p>Registre o que você fez, aprendeu e como se sentiu hoje.</p>
+
+      <form action="/registrar" method="POST" class="diario-form">
+        <label for="atividades">O que você fez hoje?</label><br>
+        <textarea name="atividades" rows="3" required></textarea><br>
+
+        <label for="aprendizado">O que você aprendeu?</label><br>
+        <textarea name="aprendizado" rows="3" required></textarea><br>
+
+        <label for="emocao">Como você se sentiu?</label><br>
+        <select name="emocao" required>
+          <option value="">Selecione...</option>
+          <option value="Feliz">😊 Feliz</option>
+          <option value="Neutro">😐 Neutro</option>
+          <option value="Triste">😞 Triste</option>
+        </select><br><br>
+
+        <button type="submit" class="btn">Salvar Registro</button>
+      </form>
+    </div>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 ProgressDay. Todos os direitos reservados.</p>
+  </footer>
+
+  <script>
+    function toggleMenu() {
+      const nav = document.querySelector("header nav");
+      nav.classList.toggle("active");
+    }
+  </script>
+</body>
+</html>

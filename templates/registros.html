@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Registros do Diário</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+  <header>
+    <a href="/diario" class="logo">ProgressDay</a>
+    <nav>
+      <a href="/diario">Novo Registro</a>
+      <a href="/registros" class="active">Ver Registros</a>
+    </nav>
+    <div class="menu-icon" onclick="toggleMenu()">
+      <i class="fas fa-bars"></i>
+    </div>
+  </header>
+
+
+<section class="home">
+  <div class="home-content">
+    <h1>Seus Registros</h1>
+    <p style="font-size: 1.6rem;">Veja seu progresso ao longo dos dias ✨</p>
+
+    <div class="registros-container">
+      {% for id, data, atividades, aprendizado, emocao in registros %}
+      <div class="registro-card">
+        <div class="registro-topo">
+          <span class="emocao">
+            {% if emocao == 'Feliz' %} 😊
+            {% elif emocao == 'Neutro' %} 😐
+            {% elif emocao == 'Triste' %} 😞
+            {% else %} 📌
+            {% endif %}
+          </span>
+          <span class="data">{{ data }}</span>
+        </div>
+        <div class="registro-conteudo">
+          <p><strong>Atividades:</strong> {{ atividades }}</p>
+          <p><strong>Aprendizado:</strong> {{ aprendizado }}</p>
+          <p><strong>Emoção:</strong> {{ emocao }}</p>
+        </div>
+        <div style="margin-top: 1rem; display: flex; gap: 1rem;">
+             <a href="/editar/{{ id }}" class="btn" style="padding: 0.5rem 1.5rem; font-size: 1.2rem; background-color: #6366F1; color: white;">Editar</a>
+         <form action="/excluir/{{ id }}" method="POST" onsubmit="return confirm('Tem certeza que deseja excluir este registro?')">
+         <button type="submit" class="btn" style="padding: 0.5rem 1.5rem; font-size: 1.2rem; background-color: crimson; color: white;">Excluir</button>
+         </form>
+        </div>
+
+      </div>
+      {% else %}
+      <p style="margin-top: 2rem;">Nenhum registro encontrado ainda 😔</p>
+      {% endfor %}
+    </div>
+  </div>
+</section>

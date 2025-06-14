@@ -1,0 +1,176 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+html {
+  font-size: 62.5%;
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: #1F1F2E;
+  color: #F4F4F5;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 1.5rem 9%;
+  background-color: #2C2C3A;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 100;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.logo {
+  font-size: 2.8rem;
+  color: #A5B4FC;
+  font-weight: 700;
+  transition: 0.3s ease;
+}
+
+.logo:hover {
+  opacity: 0.8;
+}
+
+nav a {
+  font-size: 1.6rem;
+  color: #F4F4F5;
+  margin-left: 3rem;
+  transition: 0.3s ease;
+  border-bottom: 2px solid transparent;
+}
+
+nav a:hover,
+nav a.active {
+  color: #A5B4FC;
+  border-bottom: 2px solid #A5B4FC;
+}
+
+.menu-icon {
+  display: none;
+  font-size: 3rem;
+  color: #A5B4FC;
+  cursor: pointer;
+}
+
+section {
+  padding: 10rem 9% 5rem;
+}
+
+.home {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 4rem;
+  flex-direction: column;
+  background-color: #1F1F2E;
+}
+
+.home-content h1 {
+  font-size: 4.5rem;
+  font-weight: 700;
+  color: #FFFFFF;
+}
+
+.home-content p {
+  font-size: 1.6rem;
+  margin: 1rem 0 2rem;
+  color: #D1D5DB;
+}
+
+textarea, select {
+  background-color: #2C2C3A;
+  border: 1px solid #4F46E5;
+  border-radius: 1rem;
+  padding: 1.2rem;
+  font-size: 1.6rem;
+  color: #F4F4F5;
+  width: 100%;
+  margin-bottom: 2rem;
+}
+
+textarea:focus, select:focus {
+  outline: 2px solid #6366F1;
+}
+
+.btn {
+  display: inline-block;
+  padding: 1rem 2.5rem;
+  font-size: 1.6rem;
+  background-color: #4F46E5;
+  color: white;
+  border: none;
+  border-radius: 3rem;
+  transition: 0.3s ease;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background-color: #6366F1;
+  transform: scale(1.03);
+}
+
+footer {
+  text-align: center;
+  padding: 3rem 0;
+  font-size: 1.4rem;
+  color: #888;
+}
+
+
+
+.registros-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  margin-top: 3rem;
+}
+
+.registro-card {
+  background-color: #2C2C3A;
+  padding: 2rem;
+  border-radius: 1rem;
+  border-left: 6px solid #6366F1;
+  box-shadow: 0 0 15px rgba(79, 70, 229, 0.15);
+  transition: 0.3s ease;
+}
+
+.registro-card:hover {
+  transform: scale(1.01);
+  box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+}
+
+.registro-topo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1.4rem;
+  margin-bottom: 1rem;
+}
+
+.emocao {
+  font-size: 2rem;
+}
+
+.data {
+  color: #A5B4FC;
+}
+
+.registro-conteudo p {
+  font-size: 1.4rem;
+  margin: 0.5rem 0;
+  color: #E5E7EB;
+}
+

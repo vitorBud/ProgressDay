@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Editar Registro</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+  <header>
+    <a href="/diario" class="logo">ProgressDay</a>
+    <nav>
+      <a href="/diario">Novo Registro</a>
+      <a href="/registros" class="active">Ver Registros</a>
+    </nav>
+  </header>
+
+  <section class="home">
+    <div class="home-content">
+      <h1>Editar Registro</h1>
+
+      <form action="/editar/{{ registro[0] }}" method="POST" class="diario-form">
+        <label for="atividades">O que você fez hoje?</label><br>
+        <textarea name="atividades" rows="3" required>{{ registro[2] }}</textarea><br>
+
+        <label for="aprendizado">O que você aprendeu?</label><br>
+        <textarea name="aprendizado" rows="3" required>{{ registro[3] }}</textarea><br>
+
+        <label for="emocao">Como você se sentiu?</label><br>
+        <select name="emocao" required>
+          <option value="">Selecione...</option>
+          <option value="Feliz" {% if registro[4] == 'Feliz' %}selected{% endif %}>😊 Feliz</option>
+          <option value="Neutro" {% if registro[4] == 'Neutro' %}selected{% endif %}>😐 Neutro</option>
+          <option value="Triste" {% if registro[4] == 'Triste' %}selected{% endif %}>😞 Triste</option>
+        </select><br><br>
+
+        <button type="submit" class="btn">Salvar Alterações</button>
+      </form>
+    </div>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 ProgressDay. Todos os direitos reservados.</p>
+  </footer>
+
+</body>
+</html>
