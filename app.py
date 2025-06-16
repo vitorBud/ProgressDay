@@ -1,6 +1,13 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, send_file
 import sqlite3
 from datetime import datetime
+from io import BytesIO
+from matplotlib.figure import Figure
+import matplotlib.pyplot as plt
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import A4
+from reportlab.lib.utils import ImageReader
+import tempfile
 
 # ----------------------------
 # Classe para acessar o banco
@@ -72,6 +79,10 @@ class RegistroDAO:
                     dados[emocao] = count
             return dados
 
+    def listar_emocoes_com_datas(self):
+        with sqlite3.connect(self.db_path) as conn:
+            cursor = conn.execute("SELECT data, emocao FROM registros ORDER BY data")
+            return cursor.fetchall()
 
 # --------------------------
 # Classe principal da aplicação
@@ -85,12 +96,17 @@ class DiarioApp:
     def configurar_rotas(self):
         @self.app.route('/')
         def index():
-            return redirect('/diario')
+            return render_template('home.html')  # Página inicial agora é a home
+
+        @self.app.route('/home')
+        def home():
+            return render_template('home.html')
 
         @self.app.route('/diario')
         def diario():
             emocoes = self.dao.contar_emocoes()
             return render_template('diario.html', **emocoes)
+
 
         @self.app.route('/registrar', methods=['POST'])
         def registrar():
@@ -125,9 +141,82 @@ class DiarioApp:
             self.dao.excluir_registro(id)
             return redirect('/registros')
 
+        @self.app.route('/relatorio')
+        def relatorio():
+            registros = self.dao.listar_registros()
+            emocoes_por_data = self.dao.listar_emocoes_com_datas()
+            
+            datas = []
+            valores = []
+            contagem = {"Triste": 1, "Neutro": 2, "Feliz": 3}
+            media = 0
+
+            for data, emocao in emocoes_por_data:
+                valor = contagem.get(emocao, 0)
+                datas.append(data)
+                valores.append(valor)
+                media += valor
+
+            media_final = media / len(valores) if valores else 0
+            if media_final > 2.3:
+                analise = "Você está passando por dias positivos!"
+            elif media_final < 1.7:
+                analise = "Talvez esteja enfrentando desafios emocionais."
+            else:
+                analise = "Seu humor está estável."
+
+            dados_linha = {"datas": datas, "valores": valores}
+            return render_template('relatorio.html', dados_linha=dados_linha, analise=analise)
+
+        @self.app.route('/baixar_pdf')
+        def baixar_pdf():
+            registros = self.dao.listar_registros()
+            emocoes_por_data = self.dao.listar_emocoes_com_datas()
+
+            # Criar figura do gráfico
+            fig = Figure(figsize=(6, 2.5))
+            ax = fig.subplots()
+            contagem = {"Triste": 1, "Neutro": 2, "Feliz": 3}
+            datas = [d for d, _ in emocoes_por_data]
+            valores = [contagem.get(e, 0) for _, e in emocoes_por_data]
+            ax.plot(datas, valores, marker='o', color='blue')
+            ax.set_ylim(0, 4)
+            ax.set_yticks([1, 2, 3])
+            ax.set_yticklabels(['Triste', 'Neutro', 'Feliz'])
+            ax.set_title('Evolução das Emoções')
+            ax.tick_params(axis='x', rotation=45)
+
+            # Salvar gráfico como imagem
+            buf = BytesIO()
+            fig.savefig(buf, format='png')
+            buf.seek(0)
+
+            # Criar PDF
+            output = BytesIO()
+            c = canvas.Canvas(output, pagesize=A4)
+            c.setFont("Helvetica-Bold", 14)
+            c.drawString(50, 800, "Relatório de Emoções - ProgressDay")
+            c.setFont("Helvetica", 10)
+
+            y = 760
+            for r in registros:
+                texto = f"{r[1]} - {r[2]} | {r[3]} | Emoção: {r[4]}"
+                c.drawString(50, y, texto)
+                y -= 15
+                if y < 100:
+                    c.showPage()
+                    y = 800
+
+            # Inserir o gráfico no PDF
+            c.showPage()
+            c.drawImage(ImageReader(buf), 50, 400, width=500, height=250)
+            c.save()
+            output.seek(0)
+
+            return send_file(output, as_attachment=True, download_name="relatorio_emocoes.pdf", mimetype='application/pdf')
+
     def executar(self):
         self.app.run(debug=True)
-
 
 # ------------------------
 # Execução do programa

@@ -12,8 +12,10 @@
   <header>
     <a href="#" class="logo">ProgressDay</a>
     <nav>
-      <a href="/" class="active">Home</a>
+      <a href="/home">Home</a>
+      <a href="/diario" class="active">Diario</a>
       <a href="/registros">Ver Registros</a>
+      <a href="/relatorio">Relatório</a>
     </nav>
     <div class="menu-icon" onclick="toggleMenu()">
       <i class="fas fa-bars"></i>
@@ -44,7 +46,7 @@
           <button type="submit" class="btn">Salvar Registro</button>
         </form>
       </div>
-      <div style="flex: 1; min-width: 200px; max-width: 320px; margin-left: 290px;">
+      <div style="flex: 1; min-width: 200px; max-width: 820px; margin-left: 290px;">
         <h2 style="margin-bottom: 1rem; font-size: 1.2rem;">Resumo das Emoções</h2>
         <div style="width: 520px; height: 520px; margin: 0 auto;">
           <canvas id="grafico-emocoes" width="220" height="220"></canvas>
