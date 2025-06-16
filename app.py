@@ -59,6 +59,19 @@ class RegistroDAO:
         with sqlite3.connect(self.db_path) as conn:
             conn.execute("DELETE FROM registros WHERE id = ?", (id,))
 
+    def contar_emocoes(self):
+        with sqlite3.connect(self.db_path) as conn:
+            cursor = conn.execute("""
+                SELECT emocao, COUNT(*)
+                FROM registros
+                GROUP BY emocao
+            """)
+            dados = {"Feliz": 0, "Neutro": 0, "Triste": 0}
+            for emocao, count in cursor.fetchall():
+                if emocao in dados:
+                    dados[emocao] = count
+            return dados
+
 
 # --------------------------
 # Classe principal da aplicação
@@ -76,7 +89,8 @@ class DiarioApp:
 
         @self.app.route('/diario')
         def diario():
-            return render_template('diario.html')
+            emocoes = self.dao.contar_emocoes()
+            return render_template('diario.html', **emocoes)
 
         @self.app.route('/registrar', methods=['POST'])
         def registrar():

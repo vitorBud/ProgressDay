@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Diário de Progresso</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 </head>
 <body>
 
@@ -19,53 +20,83 @@
     </div>
   </header>
 
-  <section class="home">
-    <div class="home-content">
-      <h1>Diário de Progresso Diário</h1>
-      <p>Registre o que você fez, aprendeu e como se sentiu hoje.</p>
+  <section class="home" style="display: flex; gap: 4rem; flex-wrap: wrap; align-items: flex-start;">
+    <div class="home-content" style="flex: 1; min-width: 320px; display: flex; flex-direction: row; gap: 4rem;">
+      <div style="flex: 1; min-width: 280px;">
+        <h1>Diário de Progresso Diário</h1>
+        <p>Registre o que você fez, aprendeu e como se sentiu hoje.</p>
 
-      <form action="/registrar" method="POST" class="diario-form">
-        <label for="atividades">O que você fez hoje?</label><br>
-        <textarea name="atividades" rows="3" required></textarea><br>
+        <form action="/registrar" method="POST" class="diario-form" style="margin-top: 2rem;">
+          <label for="atividades">O que você fez hoje?</label><br>
+          <textarea name="atividades" rows="3" required></textarea><br>
 
-        <label for="aprendizado">O que você aprendeu?</label><br>
-        <textarea name="aprendizado" rows="3" required></textarea><br>
+          <label for="aprendizado">O que você aprendeu?</label><br>
+          <textarea name="aprendizado" rows="3" required></textarea><br>
 
-        <label for="emocao">Como você se sentiu?</label><br>
-        <select name="emocao" required>
-          <option value="">Selecione...</option>
-          <option value="Feliz">😊 Feliz</option>
-          <option value="Neutro">😐 Neutro</option>
-          <option value="Triste">😞 Triste</option>
-        </select><br><br>
+          <label for="emocao">Como você se sentiu?</label><br>
+          <select name="emocao" required>
+            <option value="">Selecione...</option>
+            <option value="Feliz">😊 Feliz</option>
+            <option value="Neutro">😐 Neutro</option>
+            <option value="Triste">😞 Triste</option>
+          </select><br><br>
 
-        <button type="submit" class="btn">Salvar Registro</button>
-      </form>
+          <button type="submit" class="btn">Salvar Registro</button>
+        </form>
+      </div>
+      <div style="flex: 1; min-width: 200px; max-width: 320px; margin-left: 290px;">
+        <h2 style="margin-bottom: 1rem; font-size: 1.2rem;">Resumo das Emoções</h2>
+        <div style="width: 520px; height: 520px; margin: 0 auto;">
+          <canvas id="grafico-emocoes" width="220" height="220"></canvas>
+        </div>
+      </div>
     </div>
   </section>
 
-
-
   <div class="floating-buttons">
-  <a href="/diario" title="Novo Registro">
-    <i class="fas fa-pen"></i>
-  </a>
-  <a href="/registros" title="Ver Registros">
-    <i class="fas fa-book"></i>
-  </a>
-</div>
-
-
+    <a href="/diario" title="Novo Registro">
+      <i class="fas fa-pen"></i>
+    </a>
+    <a href="/registros" title="Ver Registros">
+      <i class="fas fa-book"></i>
+    </a>
+  </div>
 
   <footer>
     <p>&copy; 2025 ProgressDay. Todos os direitos reservados.</p>
   </footer>
+
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <script>
     function toggleMenu() {
       const nav = document.querySelector("header nav");
       nav.classList.toggle("active");
     }
+
+    const dadosEmocoes = JSON.parse('{{ {"Feliz": Feliz, "Neutro": Neutro, "Triste": Triste} | tojson | safe }}');
+
+    const ctx = document.getElementById('grafico-emocoes').getContext('2d');
+    new Chart(ctx, {
+      type: 'doughnut',
+      data: {
+        labels: Object.keys(dadosEmocoes),
+        datasets: [{
+          data: Object.values(dadosEmocoes),
+          backgroundColor: ['#4ade80', '#facc15', '#f87171']
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'bottom'
+          }
+        }
+      }
+    });
   </script>
+
 </body>
 </html>
