@@ -5,68 +5,168 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Registros do Diário</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <style>
+    body {
+      background: linear-gradient(145deg, #0f172a, #1e293b);
+      color: #e2e8f0;
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 2rem 10%;
+      background-color: #1e293b;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .logo {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #a78bfa;
+      text-decoration: none;
+    }
+
+    nav a {
+      margin-left: 2rem;
+      text-decoration: none;
+      font-size: 1rem;
+      color: #cbd5e1;
+      transition: color 0.3s;
+    }
+
+    nav a:hover,
+    nav a.active {
+      color: #8b5cf6;
+    }
+
+    .container {
+      padding: 6rem 5%;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      max-width: 1000px;
+      margin: auto;
+    }
+
+    .registro-card {
+      background-color: rgba(30, 41, 59, 0.6);
+      padding: 2rem;
+      border-radius: 1rem;
+      box-shadow: 0 0 20px rgba(0,0,0,0.3);
+    }
+
+    .registro-topo {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+    }
+
+    .registro-conteudo p {
+      margin: 0.5rem 0;
+      font-size: 1rem;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 0.7rem 1.5rem;
+      margin-top: 1rem;
+      background-color: #8b5cf6;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+      text-decoration: none;
+      transition: background 0.3s, transform 0.2s;
+    }
+
+    .btn:hover {
+      background-color: #7c3aed;
+      transform: scale(1.03);
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem;
+      background-color: #1e293b;
+      color: #94a3b8;
+      font-size: 0.9rem;
+      border-top: 1px solid #334155;
+    }
+
+    @media (max-width: 768px) {
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 1.5rem;
+      }
+
+      nav {
+        margin-top: 1rem;
+      }
+
+      nav a {
+        margin-left: 1rem;
+      }
+
+      .container {
+        padding: 4rem 2rem;
+      }
+    }
+  </style>
 </head>
 <body>
-
   <header>
-    <a href="/diario" class="logo">Progress Day</a>
+    <a href="/" class="logo">ProgressDay</a>
     <nav>
       <a href="/home">Home</a>
-      <a href="/diario">Diario</a>
-      <a href="/registros" class="active">Ver Registros</a>
+      <a href="/diario">Diário</a>
+      <a href="/registros" class="active">Registros</a>
       <a href="/relatorio">Relatório</a>
     </nav>
-    <div class="menu-icon" onclick="toggleMenu()">
-      <i class="fas fa-bars"></i>
-    </div>
   </header>
 
+  <section class="container">
+    <h1 style="color: #d8b4fe;">Seus Registros</h1>
+    <p style="font-size: 1.2rem; color: #a1a1aa;">Veja seu progresso ao longo dos dias ✨</p>
 
-<section class="home">
-  <div class="home-content">
-    <h1>Seus Registros</h1>
-    <p style="font-size: 1.6rem;">Veja seu progresso ao longo dos dias ✨</p>
-
-    <div class="registros-container">
-      {% for id, data, atividades, aprendizado, emocao in registros %}
-      <div class="registro-card">
-        <div class="registro-topo">
-          <span class="emocao">
-            {% if emocao == 'Feliz' %} 😊
-            {% elif emocao == 'Neutro' %} 😐
-            {% elif emocao == 'Triste' %} 😞
-            {% else %} 📌
-            {% endif %}
-          </span>
-          <span class="data">{{ data }}</span>
-        </div>
-        <div class="registro-conteudo">
-          <p><strong>Atividades:</strong> {{ atividades }}</p>
-          <p><strong>Aprendizado:</strong> {{ aprendizado }}</p>
-          <p><strong>Emoção:</strong> {{ emocao }}</p>
-        </div>
-        <div style="margin-top: 1rem; display: flex; gap: 1rem;">
-             <a href="/editar/{{ id }}" class="btn" style="padding: 0.5rem 1.5rem; font-size: 1.2rem; background-color: #6366F1; color: white;">Editar</a>
-         <form action="/excluir/{{ id }}" method="POST" onsubmit="return confirm('Tem certeza que deseja excluir este registro?')">
-         <button type="submit" class="btn" style="padding: 0.5rem 1.5rem; font-size: 1.2rem; background-color: crimson; color: white;">Excluir</button>
-         </form>
-        </div>
-
+    {% for id, data, atividades, aprendizado, emocao in registros %}
+    <div class="registro-card">
+      <div class="registro-topo">
+        <span>
+          {% if emocao == 'Feliz' %} 😊
+          {% elif emocao == 'Neutro' %} 😐
+          {% elif emocao == 'Triste' %} 😞
+          {% else %} 📌
+          {% endif %}
+        </span>
+        <span>{{ data }}</span>
       </div>
-      {% else %}
-      <p style="margin-top: 2rem;">Nenhum registro encontrado ainda 😔</p>
-      {% endfor %}
+      <div class="registro-conteudo">
+        <p><strong>Atividades:</strong> {{ atividades }}</p>
+        <p><strong>Aprendizado:</strong> {{ aprendizado }}</p>
+        <p><strong>Emoção:</strong> {{ emocao }}</p>
+      </div>
+      <div style="margin-top: 1rem; display: flex; gap: 1rem;">
+        <a href="/editar/{{ id }}" class="btn">Editar</a>
+        <form action="/excluir/{{ id }}" method="POST" onsubmit="return confirm('Tem certeza que deseja excluir este registro?')">
+          <button type="submit" class="btn" style="background-color: crimson;">Excluir</button>
+        </form>
+      </div>
     </div>
-  </div>
-</section>
+    {% else %}
+    <p style="margin-top: 2rem; color: #94a3b8;">Nenhum registro encontrado ainda 😔</p>
+    {% endfor %}
+  </section>
 
-<div class="floating-buttons">
-  <a href="/diario" title="Novo Registro">
-    <i class="fas fa-pen"></i>
-  </a>
-  <a href="/registros" title="Ver Registros">
-    <i class="fas fa-book"></i>
-  </a>
-</div>
-
+  <footer>
+    <p>&copy; 2025 ProgressDay. Todos os direitos reservados.</p>
+  </footer>
 </body>
+</html>

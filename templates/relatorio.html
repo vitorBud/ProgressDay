@@ -1,11 +1,135 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Relatório de Emoções</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      background: linear-gradient(145deg, #0f172a, #1e293b);
+      color: #e2e8f0;
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 2rem 10%;
+      background-color: #1e293b;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .logo {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #a78bfa;
+      text-decoration: none;
+    }
+
+    nav a {
+      margin-left: 2rem;
+      text-decoration: none;
+      font-size: 1rem;
+      color: #cbd5e1;
+      transition: color 0.3s;
+    }
+
+    nav a:hover,
+    nav a.active {
+      color: #8b5cf6;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 6rem 5%;
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      margin-bottom: 1rem;
+      color: #d8b4fe;
+    }
+
+    h3 {
+      margin-top: 2.5rem;
+      font-size: 1.3rem;
+      color: #f1f5f9;
+    }
+
+    p {
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+      text-align: center;
+      max-width: 800px;
+      color: #cbd5e1;
+    }
+
+    canvas {
+      width: 100% !important;
+      max-width: 1000px;
+      background-color: rgba(30, 41, 59, 0.6);
+      padding: 1.5rem;
+      border-radius: 1rem;
+      box-shadow: 0 0 20px rgba(0,0,0,0.3);
+    }
+
+    .btn {
+      margin-top: 2rem;
+      padding: 1rem 2rem;
+      background-color: #8b5cf6;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.2s;
+    }
+
+    .btn:hover {
+      background-color: #7c3aed;
+      transform: scale(1.05);
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem;
+      background-color: #1e293b;
+      color: #94a3b8;
+      font-size: 0.9rem;
+      border-top: 1px solid #334155;
+    }
+
+    @media (max-width: 768px) {
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 1.5rem;
+      }
+
+      nav {
+        margin-top: 1rem;
+      }
+
+      nav a {
+        margin-left: 1rem;
+      }
+
+      .container {
+        padding: 4rem 2rem;
+      }
+    }
+  </style>
 </head>
 <body>
 
@@ -13,27 +137,29 @@
     <a href="/" class="logo">ProgressDay</a>
     <nav>
       <a href="/home">Home</a>
-      <a href="/diario">Diario</a>
-      <a href="/registros">Ver Registros</a>
+      <a href="/diario">Diário</a>
+      <a href="/registros">Registros</a>
       <a href="/relatorio" class="active">Relatório</a>
     </nav>
   </header>
 
-  <section class="home">
-    <div class="home-content">
-      <h1>Relatório de Emoções</h1>
-      <p>Veja sua jornada emocional ao longo do tempo.</p>
+  <section class="container">
+    <h1>Relatório de Emoções</h1>
+    <p>Veja sua jornada emocional ao longo do tempo.</p>
 
-      <canvas id="graficoLinhaEmocoes" width="1000" height="300"></canvas>
+    <canvas id="graficoLinhaEmocoes"></canvas>
 
-      <h3 style="margin-top: 2rem;">Análise Automática de Humor:</h3>
-      <p><strong>{{ analise }}</strong></p>
+    <h3>Análise Automática de Humor:</h3>
+    <p><strong>{{ analise }}</strong></p>
 
-      <form action="/baixar_pdf" method="get">
-        <button class="btn" type="submit">Baixar Relatório em PDF</button>
-      </form>
-    </div>
+    <form action="/baixar_pdf" method="get">
+      <button class="btn" type="submit">Baixar Relatório em PDF</button>
+    </form>
   </section>
+
+  <footer>
+    <p>&copy; 2025 ProgressDay. Todos os direitos reservados.</p>
+  </footer>
 
   <script>
     const dadosLinha = JSON.parse(`{{ dados_linha | tojson | safe }}`);
@@ -54,6 +180,9 @@
       },
       options: {
         responsive: true,
+        plugins: {
+          legend: { position: 'bottom' }
+        },
         scales: {
           y: {
             min: 0,
@@ -62,10 +191,21 @@
               stepSize: 1,
               callback: function(value) {
                 const emocoes = ['', 'Triste', 'Neutro', 'Feliz'];
-                return emocoes[value];
-              }
+                return emocoes[value] || '';
+              },
+              color: '#cbd5e1'
+            },
+            grid: {
+              color: '#334155'
             }
-
+          },
+          x: {
+            ticks: {
+              color: '#cbd5e1'
+            },
+            grid: {
+              color: '#334155'
+            }
           }
         }
       }

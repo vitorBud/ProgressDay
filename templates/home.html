@@ -18,6 +18,7 @@
       background: linear-gradient(145deg, #0f172a, #1e293b);
       color: #e2e8f0;
       line-height: 1.6;
+      scroll-behavior: smooth;
     }
 
     header {
@@ -30,6 +31,7 @@
       position: sticky;
       top: 0;
       z-index: 10;
+      animation: fadeInDown 1s ease-out;
     }
 
     .logo {
@@ -37,6 +39,11 @@
       font-weight: 700;
       color: #8b5cf6;
       text-decoration: none;
+      transition: transform 0.3s ease;
+    }
+
+    .logo:hover {
+      transform: scale(1.05);
     }
 
     nav a {
@@ -55,12 +62,14 @@
       background: linear-gradient(135deg, #1e1b4b, #1e293b);
       padding: 6rem 2rem;
       text-align: center;
+      animation: fadeIn 1.5s ease-in;
     }
 
     .hero h1 {
       font-size: 3.5rem;
       color: #d8b4fe;
       font-weight: 700;
+      animation: slideInUp 1s ease;
     }
 
     .hero p {
@@ -93,6 +102,7 @@
       gap: 2rem;
       padding: 4rem 2rem;
       background-color: #0f172a;
+      animation: fadeInUp 1s ease-in-out;
     }
 
     .card {
@@ -108,7 +118,7 @@
     }
 
     .card:hover {
-      transform: translateY(-10px);
+      transform: translateY(-10px) scale(1.03);
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
     }
 
@@ -143,7 +153,7 @@
       flex-wrap: wrap;
       justify-content: center;
       align-items: center;
-      gap: 2.5rem;
+      gap: 2rem;
     }
 
     .destaques span {
@@ -151,12 +161,37 @@
       align-items: center;
       gap: 0.5rem;
       font-size: 1.1rem;
+      transition: transform 0.3s ease;
+    }
+
+    .destaques span:hover {
+      transform: scale(1.05);
     }
 
     .roxo { color: #a78bfa; }
     .azul { color: #38bdf8; }
     .amarelo { color: #fbbf24; }
 
+    /* Animações */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes slideInUp {
+      from { transform: translateY(60px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
   </style>
 </head>
 <body>

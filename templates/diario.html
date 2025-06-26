@@ -6,63 +6,184 @@
   <title>Diário de Progresso</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <style>
+    body {
+      background: linear-gradient(145deg, #0f172a, #1e293b);
+      color: #e2e8f0;
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 2rem 10%;
+      background-color: #1e293b;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .logo {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #a78bfa;
+      text-decoration: none;
+    }
+
+    nav a {
+      margin-left: 2rem;
+      text-decoration: none;
+      font-size: 1rem;
+      color: #cbd5e1;
+      transition: color 0.3s;
+    }
+
+    nav a:hover,
+    nav a.active {
+      color: #8b5cf6;
+    }
+
+    .menu-icon {
+      display: none;
+    }
+
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 3rem;
+      justify-content: center;
+      padding: 6rem 5%;
+    }
+
+    .form-section, .grafico-section {
+      flex: 1 1 400px;
+      max-width: 600px;
+      background-color: rgba(30, 41, 59, 0.6);
+      padding: 2rem;
+      border-radius: 1rem;
+      box-shadow: 0 0 20px rgba(0,0,0,0.3);
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      margin-bottom: 1rem;
+      color: #d8b4fe;
+    }
+
+    label {
+      display: block;
+      margin-top: 1.5rem;
+      font-weight: 600;
+      color: #f1f5f9;
+    }
+
+    textarea, select {
+      width: 100%;
+      padding: 1rem;
+      margin-top: 0.5rem;
+      background-color: #1e293b;
+      border: 1px solid #8b5cf6;
+      border-radius: 0.7rem;
+      color: white;
+      resize: vertical;
+    }
+
+    button.btn {
+      margin-top: 2rem;
+      padding: 1rem 2rem;
+      background-color: #8b5cf6;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.2s;
+    }
+
+    button.btn:hover {
+      background-color: #7c3aed;
+      transform: scale(1.03);
+    }
+
+    canvas {
+      width: 100% !important;
+      height: auto !important;
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem;
+      background-color: #1e293b;
+      color: #94a3b8;
+      font-size: 0.9rem;
+      border-top: 1px solid #334155;
+    }
+
+    @media (max-width: 768px) {
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 1.5rem;
+      }
+
+      nav {
+        margin-top: 1rem;
+      }
+
+      nav a {
+        margin-left: 1rem;
+      }
+
+      .container {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+  </style>
 </head>
 <body>
 
   <header>
-    <a href="#" class="logo">ProgressDay</a>
+    <a href="/" class="logo">ProgressDay</a>
     <nav>
       <a href="/home">Home</a>
-      <a href="/diario" class="active">Diario</a>
-      <a href="/registros">Ver Registros</a>
+      <a href="/diario" class="active">Diário</a>
+      <a href="/registros">Registros</a>
       <a href="/relatorio">Relatório</a>
     </nav>
-    <div class="menu-icon" onclick="toggleMenu()">
-      <i class="fas fa-bars"></i>
-    </div>
   </header>
 
-  <section class="home" style="display: flex; gap: 4rem; flex-wrap: wrap; align-items: flex-start;">
-    <div class="home-content" style="flex: 1; min-width: 320px; display: flex; flex-direction: row; gap: 4rem;">
-      <div style="flex: 1; min-width: 280px;">
-        <h1>Diário de Progresso Diário</h1>
-        <p>Registre o que você fez, aprendeu e como se sentiu hoje.</p>
+  <section class="container">
+    <div class="form-section">
+      <h1>Registro Diário</h1>
+      <p>Registre suas atividades, aprendizados e emoções.</p>
+      <form action="/registrar" method="POST">
+        <label for="atividades">O que você fez hoje?</label>
+        <textarea name="atividades" rows="3" required></textarea>
 
-        <form action="/registrar" method="POST" class="diario-form" style="margin-top: 2rem;">
-          <label for="atividades">O que você fez hoje?</label><br>
-          <textarea name="atividades" rows="3" required></textarea><br>
+        <label for="aprendizado">O que você aprendeu?</label>
+        <textarea name="aprendizado" rows="3" required></textarea>
 
-          <label for="aprendizado">O que você aprendeu?</label><br>
-          <textarea name="aprendizado" rows="3" required></textarea><br>
+        <label for="emocao">Como você se sentiu?</label>
+        <select name="emocao" required>
+          <option value="">Selecione...</option>
+          <option value="Feliz">😊 Feliz</option>
+          <option value="Neutro">😐 Neutro</option>
+          <option value="Triste">😞 Triste</option>
+        </select>
 
-          <label for="emocao">Como você se sentiu?</label><br>
-          <select name="emocao" required>
-            <option value="">Selecione...</option>
-            <option value="Feliz">😊 Feliz</option>
-            <option value="Neutro">😐 Neutro</option>
-            <option value="Triste">😞 Triste</option>
-          </select><br><br>
+        <button type="submit" class="btn">Salvar Registro</button>
+      </form>
+    </div>
 
-          <button type="submit" class="btn">Salvar Registro</button>
-        </form>
-      </div>
-      <div style="flex: 1; min-width: 200px; max-width: 820px; margin-left: 290px;">
-        <h2 style="margin-bottom: 1rem; font-size: 1.2rem;">Resumo das Emoções</h2>
-        <div style="width: 520px; height: 520px; margin: 0 auto;">
-          <canvas id="grafico-emocoes" width="220" height="220"></canvas>
-        </div>
-      </div>
+    <div class="grafico-section">
+      <h2 style="text-align: center; margin-bottom: 1rem;">Resumo das Emoções</h2>
+      <canvas id="grafico-emocoes"></canvas>
     </div>
   </section>
-
-  <div class="floating-buttons">
-    <a href="/diario" title="Novo Registro">
-      <i class="fas fa-pen"></i>
-    </a>
-    <a href="/registros" title="Ver Registros">
-      <i class="fas fa-book"></i>
-    </a>
-  </div>
 
   <footer>
     <p>&copy; 2025 ProgressDay. Todos os direitos reservados.</p>
@@ -70,16 +191,10 @@
 
   <!-- Chart.js CDN -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
   <script>
-    function toggleMenu() {
-      const nav = document.querySelector("header nav");
-      nav.classList.toggle("active");
-    }
-
     const dadosEmocoes = JSON.parse('{{ {"Feliz": Feliz, "Neutro": Neutro, "Triste": Triste} | tojson | safe }}');
-
     const ctx = document.getElementById('grafico-emocoes').getContext('2d');
+
     new Chart(ctx, {
       type: 'doughnut',
       data: {
@@ -92,9 +207,7 @@
       options: {
         responsive: true,
         plugins: {
-          legend: {
-            position: 'bottom'
-          }
+          legend: { position: 'bottom' }
         }
       }
     });

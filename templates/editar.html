@@ -5,6 +5,161 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Editar Registro</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <style>
+    body {
+      background: linear-gradient(145deg, #0f172a, #1e293b);
+      color: #e2e8f0;
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 2rem 10%;
+      background-color: #1e293b;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .logo {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #a78bfa;
+      text-decoration: none;
+    }
+
+    nav a {
+      margin-left: 2rem;
+      text-decoration: none;
+      font-size: 1rem;
+      color: #cbd5e1;
+      transition: color 0.3s;
+    }
+
+    nav a:hover,
+    nav a.active {
+      color: #8b5cf6;
+    }
+
+    .container {
+      display: flex;
+      justify-content: center;
+      padding: 6rem 5%;
+    }
+
+    .form-box {
+      max-width: 700px;
+      width: 100%;
+      background-color: rgba(30, 41, 59, 0.6);
+      padding: 2rem;
+      border-radius: 1rem;
+      box-shadow: 0 0 20px rgba(0,0,0,0.3);
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      margin-bottom: 1rem;
+      color: #d8b4fe;
+      text-align: center;
+    }
+
+    label {
+      display: block;
+      margin-top: 1.5rem;
+      font-weight: 600;
+      color: #f1f5f9;
+    }
+
+    textarea, select {
+      width: 100%;
+      padding: 1rem;
+      margin-top: 0.5rem;
+      background-color: #1e293b;
+      border: 1px solid #8b5cf6;
+      border-radius: 0.7rem;
+      color: white;
+      resize: vertical;
+    }
+
+    .btn {
+      margin-top: 2rem;
+      padding: 1rem 2rem;
+      background-color: #8b5cf6;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.2s;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .btn:hover {
+      background-color: #7c3aed;
+      transform: scale(1.05);
+    }
+
+    .floating-buttons {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .floating-buttons a {
+      background-color: #8b5cf6;
+      padding: 1rem;
+      border-radius: 50%;
+      color: white;
+      font-size: 1.2rem;
+      box-shadow: 0 4px 20px rgba(139, 92, 246, 0.4);
+      transition: transform 0.2s;
+    }
+
+    .floating-buttons a:hover {
+      transform: scale(1.1);
+      background-color: #7c3aed;
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem;
+      background-color: #1e293b;
+      color: #94a3b8;
+      font-size: 0.9rem;
+      border-top: 1px solid #334155;
+    }
+
+    @media (max-width: 768px) {
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 1.5rem;
+      }
+
+      nav {
+        margin-top: 1rem;
+      }
+
+      nav a {
+        margin-left: 1rem;
+      }
+
+      .container {
+        padding: 4rem 2rem;
+      }
+    }
+  </style>
 </head>
 <body>
 
@@ -12,53 +167,48 @@
     <a href="/diario" class="logo">ProgressDay</a>
     <nav>
       <a href="/home">Home</a>
-      <a href="/diario">Diario</a>
-      <a href="/registros" class="active">Ver Registros</a>
+      <a href="/diario">Diário</a>
+      <a href="/registros" class="active">Registros</a>
       <a href="/relatorio">Relatório</a>
     </nav>
   </header>
 
-  <section class="home">
-    <div class="home-content">
+  <section class="container">
+    <div class="form-box">
       <h1>Editar Registro</h1>
 
-      <form action="/editar/{{ registro[0] }}" method="POST" class="diario-form">
-        <label for="atividades">O que você fez hoje?</label><br>
-        <textarea name="atividades" rows="3" required>{{ registro[2] }}</textarea><br>
+      <form action="/editar/{{ registro[0] }}" method="POST">
+        <label for="atividades">O que você fez hoje?</label>
+        <textarea name="atividades" rows="3" required>{{ registro[2] }}</textarea>
 
-        <label for="aprendizado">O que você aprendeu?</label><br>
-        <textarea name="aprendizado" rows="3" required>{{ registro[3] }}</textarea><br>
+        <label for="aprendizado">O que você aprendeu?</label>
+        <textarea name="aprendizado" rows="3" required>{{ registro[3] }}</textarea>
 
-        <label for="emocao">Como você se sentiu?</label><br>
+        <label for="emocao">Como você se sentiu?</label>
         <select name="emocao" required>
           <option value="">Selecione...</option>
           <option value="Feliz" {% if registro[4] == 'Feliz' %}selected{% endif %}>😊 Feliz</option>
           <option value="Neutro" {% if registro[4] == 'Neutro' %}selected{% endif %}>😐 Neutro</option>
           <option value="Triste" {% if registro[4] == 'Triste' %}selected{% endif %}>😞 Triste</option>
-        </select><br><br>
+        </select>
 
         <button type="submit" class="btn">Salvar Alterações</button>
       </form>
     </div>
   </section>
 
-
   <div class="floating-buttons">
-  <a href="/diario" title="Novo Registro">
-    <i class="fas fa-pen"></i>
-  </a>
-  <a href="/registros" title="Ver Registros">
-    <i class="fas fa-book"></i>
-  </a>
-</div>
-
-
+    <a href="/diario" title="Novo Registro">
+      <i class="fas fa-pen"></i>
+    </a>
+    <a href="/registros" title="Ver Registros">
+      <i class="fas fa-book"></i>
+    </a>
+  </div>
 
   <footer>
     <p>&copy; 2025 ProgressDay. Todos os direitos reservados.</p>
   </footer>
-
-
 
 </body>
 </html>
