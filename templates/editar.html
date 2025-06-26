@@ -7,6 +7,8 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link rel="manifest" href="/static/manifest.json">
+  <meta name="theme-color" content="#8b5cf6">
   <style>
     body {
       background: linear-gradient(145deg, #0f172a, #1e293b);
@@ -209,6 +211,21 @@
   <footer>
     <p>&copy; 2025 ProgressDay. Todos os direitos reservados.</p>
   </footer>
+
+
+
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/static/service-worker.js')
+      .then(function(reg) {
+        console.log('Service Worker registrado com sucesso!', reg);
+      }).catch(function(err) {
+        console.log('Falha ao registrar o Service Worker 😥', err);
+      });
+  }
+</script>
+
+
 
 </body>
 </html>

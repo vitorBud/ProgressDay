@@ -6,6 +6,9 @@
   <title>ProgressDay - Sua Jornada Emocional</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="manifest" href="/static/manifest.json">
+  <meta name="theme-color" content="#8b5cf6">
+
   <style>
     * {
       margin: 0;
@@ -232,6 +235,21 @@
   <footer>
     <p>&copy; 2025 ProgressDay • Criado com dedicação para sua evolução pessoal</p>
   </footer>
+
+
+
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/static/service-worker.js')
+      .then(function(reg) {
+        console.log('Service Worker registrado com sucesso!', reg);
+      }).catch(function(err) {
+        console.log('Falha ao registrar o Service Worker 😥', err);
+      });
+  }
+</script>
+
+
 
 </body>
 </html>

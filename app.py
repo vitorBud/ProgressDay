@@ -8,7 +8,7 @@ from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.utils import ImageReader
 import tempfile
-
+import app
 # ----------------------------
 # Classe para acessar o banco
 # ----------------------------
@@ -216,11 +216,13 @@ class DiarioApp:
             return send_file(output, as_attachment=True, download_name="relatorio_emocoes.pdf", mimetype='application/pdf')
 
     def executar(self):
-        self.app.run(debug=True)
+        self.app.run(host="0.0.0.0", port=5000, debug=True)
+
 
 # ------------------------
 # Execução do programa
 # ------------------------
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = DiarioApp()
     app.executar()
+
